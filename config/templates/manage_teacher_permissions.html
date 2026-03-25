@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Teacher Permissions</title>
+</head>
+<body>
+<h2>Manage Teacher Permissions</h2>
+
+<table border="1" cellpadding="6">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Can Add Student</th>
+    <th>Can Delete Student</th>
+    <th>Save</th>
+  </tr>
+  {% for t in teachers %}
+  <tr>
+    <form method="post" action="{% url 'manage_teacher_permissions' %}">
+      {% csrf_token %}
+      <td>{{ t.id }}</td>
+      <td>{{ t.name }}</td>
+      <td>{{ t.email }}</td>
+      <td>
+        <input type="checkbox" name="can_add_student" {% if t.can_add_student %}checked{% endif %}>
+      </td>
+      <td>
+        <input type="checkbox" name="can_delete_student" {% if t.can_delete_student %}checked{% endif %}>
+      </td>
+      <td>
+        <input type="hidden" name="teacher_id" value="{{ t.id }}">
+        <button type="submit">Update</button>
+      </td>
+    </form>
+  </tr>
+  {% endfor %}
+</table>
+</body>
+</html>

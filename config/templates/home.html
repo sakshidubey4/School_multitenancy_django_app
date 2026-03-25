@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management - Home</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f4f5fb;
+            color: #111827;
+        }
+
+        .navbar {
+            background: #111827;
+            color: #f9fafb;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .navbar a {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(249, 250, 251, 0.2);
+        }
+
+        .navbar a:hover {
+            background: #1f2937;
+        }
+
+        .page-shell {
+            padding: 20px 12px 28px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: #ffffff;
+            padding: 18px 20px 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .btn-green {
+            background: #10b981;
+            color: #ecfdf5;
+            border-color: #059669;
+        }
+
+        .btn-green:hover {
+            background: #059669;
+        }
+
+        .btn-blue {
+            background: #e0ecff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .btn-blue:hover {
+            background: #d0e2ff;
+        }
+
+        .btn-red {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .btn-red:hover {
+            background: #fecaca;
+        }
+
+        .btn-ghost {
+            background: #f9fafb;
+            color: #4b5563;
+            border-color: #d1d5db;
+        }
+
+        .btn-ghost:hover {
+            background: #e5e7eb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        th, td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        thead {
+            background: #f9fafb;
+        }
+
+        th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #6b7280;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #6b7280;
+            padding: 12px 8px;
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.35);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background-color: #ffffff;
+            padding: 14px 16px 16px;
+            border-radius: 10px;
+            width: 340px;
+            max-width: 90%;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.25);
+            border: 1px solid #e5e7eb;
+        }
+
+        .modal-header {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: #374151;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 6px 8px;
+            font-size: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px rgba(59,130,246,0.2);
+        }
+
+        .modal-footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .error-box {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            padding: 6px 8px;
+            font-size: 12px;
+            border-radius: 6px;
+            margin-top: 6px;
+            border: 1px solid #fecaca;
+        }
+
+        .error-box p {
+            margin: 0;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 14px 12px 16px;
+            }
+
+            .header-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-row .btn {
+                align-self: stretch;
+                justify-content: center;
+            }
+
+            th, td {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-title">Student Management</div>
+        <div>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+
+    <div class="page-shell">
+        <div class="container">
+            <div class="header-row">
+                <div>
+                    <h2>Members List</h2>
+                    <div class="header-subtitle">
+                        {% if is_admin %}
+                            All registered members with their contact details.
+                        {% elif is_teacher %}
+                            You and your assigned students.
+                        {% else %}
+                            Your profile and teacher information.
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if is_admin or is_teacher %}
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    {% if is_admin %}
+                        <a href="{% url 'export_members' %}" class="btn btn-blue">Export CSV</a>
+                        <a href="{% url 'import_members' %}" class="btn btn-ghost">Import CSV</a>
+                        <a href="{% url 'manage_teacher_permissions' %}" class="btn btn-ghost">Manage Teacher Permissions</a>
+                        <button class="btn btn-green" type="button" onclick="openAddModal()">
+                            + Add Member
+                        </button>
+                    {% elif is_teacher and request.user.member_profile.can_add_student %}
+                        <button class="btn btn-green" type="button" onclick="openAddModal()">
+                            + Add Student
+                        </button>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            {% if is_admin %}
+            <div style="display:flex; gap:12px; margin-bottom:14px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:160px; padding:10px 12px; border-radius:10px; background:#eff6ff; border:1px solid #bfdbfe;">
+                    <div style="font-size:12px; color:#6b7280;">Total Members</div>
+                    <div style="font-size:20px; font-weight:600;">{{ total_members }}</div>
+                </div>
+                <div style="flex:1; min-width:160px; padding:10px 12px; border-radius:10px; background:#ecfdf3; border:1px solid #bbf7d0;">
+                    <div style="font-size:12px; color:#6b7280;">Teachers</div>
+                    <div style="font-size:20px; font-weight:600;">{{ teachers_count }}</div>
+                </div>
+                <div style="flex:1; min-width:160px; padding:10px 12px; border-radius:10px; background:#fef9c3; border:1px solid #fef08a;">
+                    <div style="font-size:12px; color:#6b7280;">Students</div>
+                    <div style="font-size:20px; font-weight:600;">{{ students_count }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        {% if is_student %}
+                            <th>Teacher</th>
+                        {% endif %}
+                        {% if is_admin or is_teacher %}
+                            <th>Actions</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>{{ member.id }}</td>
+                        <td>{{ member.name }}</td>
+                        <td>{{ member.email }}</td>
+                        <td>{{ member.phone }}</td>
+                        {% if is_student %}
+                            <td>{{ member.teacher.name }}</td>
+                        {% endif %}
+                        {% if is_admin or is_teacher %}
+                        <td>
+                            <button
+                                type="button"
+                                class="btn btn-blue"
+                                onclick="openEditModal(
+                                    '{{ member.id }}',
+                                    '{{ member.name|escapejs }}',
+                                    '{{ member.email|escapejs }}',
+                                    '{{ member.phone|escapejs }}',
+                                    '{% if is_admin %}{{ member.role }}{% endif %}'
+                                );">
+                                Edit
+                            </button>
+
+                            {% if is_admin %}
+                                <form method="post"
+                                      action="{% url 'delete_member' member.id %}"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Are you sure you want to delete this member?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-red">Delete</button>
+                                </form>
+                            {% elif is_teacher and member.role == "student" and member.teacher_id == request.user.member_profile.id and request.user.member_profile.can_delete_student %}
+                                <form method="post"
+                                      action="{% url 'delete_member' member.id %}"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-red">Delete</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="{% if is_admin or is_teacher %}{% if is_student %}6{% else %}5{% endif %}{% else %}5{% endif %}" class="empty-row">
+                            {% if is_admin %}
+                                No members added yet. Click "Add Member" to get started!
+                            {% elif is_teacher %}
+                                No students assigned to you yet. Click "Add Student" to create one!
+                            {% else %}
+                                No data available for your account.
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if is_admin or is_teacher %}
+    <div class="modal-backdrop" id="memberModal">
+        <div class="modal-box">
+            <div class="modal-header" id="modalTitle">
+                {% if is_admin %}Add New Member{% else %}Add New Student{% endif %}
+            </div>
+            <div class="modal-subtitle" id="modalSubtitle">
+                {% if is_admin %}
+                    Enter details to create a new member.
+                {% else %}
+                    Enter details to create a new student in your class.
+                {% endif %}
+            </div>
+
+            <form method="post" action="{% url 'home' %}">
+                {% csrf_token %}
+
+                <input type="hidden" name="mode" id="formMode" value="add">
+                <input type="hidden" name="member_id" id="memberIdField" value="">
+
+                <div class="form-group">
+                    <label>Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    {{ form.phone }}
+                </div>
+
+                {% if is_admin %}
+                <div class="form-group" id="roleGroup">
+                    <label>Role</label>
+                    {{ form.role }}
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label>Password</label>
+                    {{ form.password }}
+                </div>
+
+                {% if form.non_field_errors %}
+                <div class="error-box">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if form.errors %}
+                <div class="error-box">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-green" id="submitButtonText">
+                        {% if is_admin %}Add Member{% else %}Add Student{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+    const isAdmin = "{{ is_admin|lower }}" === "true";
+
+    function openAddModal() {
+        const modal = document.getElementById('memberModal');
+        const modeField = document.getElementById('formMode');
+        const memberIdField = document.getElementById('memberIdField');
+        const title = document.getElementById('modalTitle');
+        const subtitle = document.getElementById('modalSubtitle');
+        const submitButton = document.getElementById('submitButtonText');
+
+        modeField.value = 'add';
+        memberIdField.value = '';
+
+        setInputValue('{{ form.name.id_for_label }}', '');
+        setInputValue('{{ form.email.id_for_label }}', '');
+        setInputValue('{{ form.phone.id_for_label }}', '');
+        setInputValue('{{ form.password.id_for_label }}', '');
+
+        title.textContent = isAdmin ? "Add New Member" : "Add New Student";
+        subtitle.textContent = isAdmin ? "Enter details to create a new member." : "Enter details to create a new student in your class.";
+        submitButton.textContent = isAdmin ? "Add Member" : "Add Student";
+
+        modal.style.display = 'flex';
+    }
+
+    function openEditModal(id, name, email, phone, role) {
+        const modal = document.getElementById('memberModal');
+        const modeField = document.getElementById('formMode');
+        const memberIdField = document.getElementById('memberIdField');
+        const title = document.getElementById('modalTitle');
+        const subtitle = document.getElementById('modalSubtitle');
+        const submitButton = document.getElementById('submitButtonText');
+
+        modeField.value = 'edit';
+        memberIdField.value = id;
+
+        setInputValue('{{ form.name.id_for_label }}', name);
+        setInputValue('{{ form.email.id_for_label }}', email);
+        setInputValue('{{ form.phone.id_for_label }}', phone);
+
+        {% if is_admin %}
+        const roleSelect = document.getElementById('{{ form.role.id_for_label }}');
+        if (roleSelect && role) {
+            roleSelect.value = role;
+        }
+        {% endif %}
+
+        title.textContent = "Edit Member";
+        subtitle.textContent = "Update details for this member.";
+        submitButton.textContent = "Save Changes";
+
+        modal.style.display = 'flex';
+    }
+
+    function setInputValue(fieldId, value) {
+        const input = document.getElementById(fieldId);
+        if (input) {
+            input.value = value;
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('memberModal').style.display = 'none';
+    }
+    </script>
+</body>
+</html>

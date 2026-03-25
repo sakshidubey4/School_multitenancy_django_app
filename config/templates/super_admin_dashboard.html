@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Super Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #e0f2fe 0, #eef2ff 40%, #f4f5fb 100%);
+            color: #0f172a;
+        }
+
+        .navbar {
+            background: #020617;
+            color: #f9fafb;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(15,23,42,0.45);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .navbar-title {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .navbar-right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: #e5e7eb;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(249, 250, 251, 0.12);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .navbar a:hover {
+            background: #111827;
+        }
+
+        .page-shell {
+            padding: 22px 12px 32px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 980px;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 18px 20px 22px;
+            border-radius: 14px;
+            box-shadow:
+                0 18px 45px rgba(15, 23, 42, 0.16),
+                0 0 0 1px rgba(148, 163, 184, 0.25);
+            backdrop-filter: blur(8px);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 650;
+        }
+
+        .header-subtitle {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .chip-row {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid #d4d4ff;
+            background: #eef2ff;
+            color: #4338ca;
+        }
+
+        .btn {
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.16s ease;
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #ecfdf5;
+            box-shadow: 0 10px 18px rgba(22, 163, 74, 0.35);
+        }
+
+        .btn-green:hover {
+            filter: brightness(0.97);
+            transform: translateY(-1px);
+            box-shadow: 0 14px 26px rgba(22, 163, 74, 0.4);
+        }
+
+        .btn-ghost {
+            background: #f9fafb;
+            color: #4b5563;
+            border-color: #d1d5db;
+        }
+
+        .btn-ghost:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        .stats-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 180px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #eff6ff, #e0f2fe);
+            border: 1px solid #bfdbfe;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+        }
+
+        .stat-value {
+            margin-top: 4px;
+            font-size: 20px;
+            font-weight: 650;
+        }
+
+        .stat-muted {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .table-shell {
+            margin-top: 6px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead {
+            background: linear-gradient(to right, #f9fafb, #eef2ff);
+        }
+
+        th, td {
+            padding: 9px 11px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+
+        .role-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 500;
+            background: #eef2ff;
+            color: #4338ca;
+        }
+
+        .badge-none {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #6b7280;
+            padding: 14px 8px;
+        }
+
+        /* Modal */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(15,23,42,0.35);
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            padding: 16px 18px 14px;
+            border-radius: 12px;
+            width: 360px;
+            max-width: 90%;
+            box-shadow: 0 16px 40px rgba(15,23,42,0.25);
+            border: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .modal-subtitle {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .modal-field {
+            margin-bottom: 8px;
+        }
+
+        .modal-field label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: #374151;
+        }
+
+        .modal-field input,
+        .modal-field textarea {
+            width: 100%;
+            padding: 7px 8px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+        }
+
+        .modal-footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                padding: 14px 12px 16px;
+            }
+
+            .header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .stats-row {
+                gap: 8px;
+            }
+
+            th, td {
+                font-size: 12px;
+                padding: 7px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-title">Student Management · Super Admin</div>
+        <div class="navbar-right">
+            <a href="{% url 'home' %}">App Home</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+
+    <div class="page-shell">
+        <div class="container">
+            <div class="header-row">
+                <div>
+                    <h2>Schools & Admins</h2>
+                    <div class="header-subtitle">
+                        Central view of every school in the system and its assigned admin account.
+                    </div>
+                    <div class="chip-row">
+                        <span class="chip">Global superuser only</span>
+                        <span class="chip">One admin per school (via Member role)</span>
+                    </div>
+                </div>
+
+                <a href="{% url 'create_school_admin' %}" class="btn btn-green">
+                    + Create School & Admin
+                </a>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-label">Total Schools</div>
+                    <div class="stat-value">{{ rows|length }}</div>
+                    <div class="stat-muted">Tenants currently active</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg,#ecfdf3,#dcfce7); border-color:#bbf7d0;">
+                    <div class="stat-label">Schools With Admin</div>
+                    <div class="stat-value">
+                        {{ rows|length }}  <!-- simple count; refine if needed -->
+                    </div>
+                    <div class="stat-muted">Have at least one admin Member</div>
+                </div>
+            </div>
+
+            <div class="table-shell">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>School</th>
+                            <th>Code</th>
+                            <th>Admin Name</th>
+                            <th>Admin Username</th>
+                            <th>Admin Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if rows %}
+                            {% for row in rows %}
+                            <tr>
+                                <td>{{ row.school.id }}</td>
+                                <td>{{ row.school.name }}</td>
+                                <td>{{ row.school.code }}</td>
+                                {% if row.admin %}
+                                    <td>
+                                        <span class="role-pill">
+                                            {{ row.admin.name }} · Admin
+                                        </span>
+                                    </td>
+                                    <td>{{ row.admin.user.username }}</td>
+                                    <td>{{ row.admin.email }}</td>
+                                {% else %}
+                                    <td colspan="3" class="empty-row">
+                                        <span class="badge-none">No admin assigned yet</span>
+                                    </td>
+                                {% endif %}
+                                <td>
+                                    <button
+                                        type="button"
+                                        class="btn btn-ghost"
+                                        style="padding:4px 10px;font-size:12px;"
+                                        onclick="openEditSchoolModal(
+                                            {{ row.school.id }},
+                                            '{{ row.school.name|escapejs }}',
+                                            '{{ row.school.code|escapejs }}'
+                                        );">
+                                        Edit
+                                    </button>
+
+                                    <form method="post"
+                                          action="{% url 'delete_school' row.school.id %}"
+                                          style="display:inline;"
+                                          onsubmit="return confirm('Delete this school and all its members?');">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                class="btn btn-danger"
+                                                style="padding:4px 10px;font-size:12px;">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="empty-row">
+                                    No schools created yet. Use “Create School & Admin” to add the first one.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit School Modal -->
+    <div id="editSchoolModal" class="modal-backdrop">
+        <div class="modal-box">
+            <div class="modal-title">Edit School</div>
+            <div class="modal-subtitle">
+                Update the basic details for this school.
+            </div>
+
+            <form method="post" id="editSchoolForm">
+                {% csrf_token %}
+                <div class="modal-field">
+                    <label>School name</label>
+                    <input type="text" name="name" id="editSchoolName">
+                </div>
+                <div class="modal-field">
+                    <label>School code</label>
+                    <input type="text" name="code" id="editSchoolCode">
+                </div>
+                <div class="modal-field">
+                    <label>Address (optional)</label>
+                    <textarea name="address" id="editSchoolAddress" rows="3"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" onclick="closeEditSchoolModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-green">
+                        Save changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditSchoolModal(id, name, code) {
+            const modal = document.getElementById('editSchoolModal');
+            const form = document.getElementById('editSchoolForm');
+            const nameInput = document.getElementById('editSchoolName');
+            const codeInput = document.getElementById('editSchoolCode');
+            const addrInput = document.getElementById('editSchoolAddress');
+
+            // Set form action to edit_school URL with this id
+            form.action = "{% url 'edit_school' 0 %}".replace("0", id);
+
+            nameInput.value = name;
+            codeInput.value = code;
+            if (addrInput) {
+                addrInput.value = "";
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function closeEditSchoolModal() {
+            document.getElementById('editSchoolModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
